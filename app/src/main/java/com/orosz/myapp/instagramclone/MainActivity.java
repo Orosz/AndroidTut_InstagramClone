@@ -66,9 +66,9 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
                                 Toast.makeText(MainActivity.this, "Sign in successfully !", Toast.LENGTH_LONG).show();
 
-                                //Intent homeIntent = new Intent(SignIn.this, Home.class);
-                                //Common.currentUser = user;
-                                //startActivity(homeIntent);
+                                Intent userList = new Intent(getApplicationContext(), UserList.class);
+                                Common.currentUser = user;
+                                startActivity(userList);
                                 //finish();
 
                             } else {
