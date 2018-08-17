@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
                                 Toast.makeText(MainActivity.this, "Sign in successfully !", Toast.LENGTH_LONG).show();
 
                                 Intent userList = new Intent(getApplicationContext(), UserList.class);
+
                                 Common.currentUser = user;
                                 startActivity(userList);
                                 //finish();
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
                             }
 
                         } else {
-
+                            mDialog.dismiss();
                             Toast.makeText(MainActivity.this, "User not registered !", Toast.LENGTH_LONG).show();
 
                         }
@@ -112,9 +113,11 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
                         } else {
 
                             mDialog.dismiss();
-                            User user =new User(editName.getText().toString(),
+                            User user =new User(editPhone.getText().toString(),
+                                    editName.getText().toString(),
                                     editPassword.getText().toString());
                             table_user.child(editPhone.getText().toString()).setValue(user);
+                            //user.setPhone(editPhone.getText().toString());
                             Toast.makeText(MainActivity.this, "Sign Up successfully!", Toast.LENGTH_LONG).show();
                             //finish();
                         }
@@ -138,8 +141,6 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
 
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
-
-
 
         }
         return false;
