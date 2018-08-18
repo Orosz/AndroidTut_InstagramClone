@@ -1,13 +1,17 @@
 package com.orosz.myapp.instagramclone;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,6 +23,7 @@ import com.orosz.myapp.instagramclone.Model.ImageLink;
 import com.orosz.myapp.instagramclone.Model.User;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import static com.orosz.myapp.instagramclone.Common.Common.currentUser;
 
@@ -42,7 +47,7 @@ public class UserFeed extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Intent i = getIntent();
+        final Intent i = getIntent();
         String activeUsername = i.getStringExtra("username");
         String activeUserPhoneNum = i.getStringExtra("userPhone");
 
@@ -74,8 +79,27 @@ public class UserFeed extends AppCompatActivity {
                     }
                 }
 
-                for (int index = 0; index < imageStorageUrls.size(); index++) {
+                //TextView textTest = (TextView) findViewById(R.id.textTest);
+                //textTest.setText("hellor \n");
+                int ulrArraySize = imageStorageUrls.size();
+                if (ulrArraySize > 20) {ulrArraySize = 20;}
+
+                for (int index = 0; index < ulrArraySize; index++) {
                     //code for pictures
+                    //textTest.append("Link "+index+ ": " +imageStorageUrls.get(index) + "\n");
+                    //20 limit memory download - old f'in phone
+                    //we will try to set dynamic image views
+
+                    ImageView imageView = new ImageView(getApplicationContext());
+                    imageView.setImageBitmap(getImgUrl(imageStorageUrls.get(index)));
+
+                    imageView.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                    ));
+
+                    linearLayout.addView(imageView);
+
                 }
 
             }
@@ -87,6 +111,24 @@ public class UserFeed extends AppCompatActivity {
         });
     }
 
+    public Bitmap getImgUrl(String url) {
+        ImageDownloadTask task = new ImageDownloadTask();
+        Bitmap myImage;
+
+        try {
+
+            myImage = task.execute(url).get();
+            return myImage;
+
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
 
     @Override
